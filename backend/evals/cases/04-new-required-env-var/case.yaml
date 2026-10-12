@@ -1,0 +1,53 @@
+description: Stripe webhook verification needs a new required env var with no default.
+files:
+  - path: app/core/config.py
+    patch: |
+      @@ -14,6 +14,7 @@ class Settings(BaseSettings):
+           database_url: str
+           redis_url: str = "redis://localhost:6379/0"
+           stripe_api_key: str
+      +    stripe_webhook_secret: str
+           sentry_dsn: str | None = None
+  - path: app/routers/webhooks.py
+    status: ADDED
+    patch: |
+      @@ -0,0 +1,21 @@
+      +import os
+      +
+      +import stripe
+      +from fastapi import APIRouter, Header, HTTPException, Request
+      +
+      +router = APIRouter()
+      +WEBHOOK_SECRET = os.environ["STRIPE_WEBHOOK_SECRET"]
+      +
+      +
+      +@router.post("/v1/webhooks/stripe")
+      +async def stripe_webhook(request: Request, stripe_signature: str = Header()) -> dict[str, str]:
+      +    payload = await request.body()
+      +    try:
+      +        event = stripe.Webhook.construct_event(payload, stripe_signature, WEBHOOK_SECRET)
+      +    except stripe.SignatureVerificationError as exc:
+      +        raise HTTPException(status_code=400, detail="bad signature") from exc
+      +    await handle_event(event)
+      +    return {"status": "ok"}
+  - path: .env.example
+    patch: |
+      @@ -3,3 +3,4 @@ DATABASE_URL=postgresql://localhost/app
+       REDIS_URL=redis://localhost:6379/0
+       STRIPE_API_KEY=
+      +STRIPE_WEBHOOK_SECRET=
+       SENTRY_DSN=
+expected:
+  verdict: [APPROVED_WITH_CAUTION]
+  rollback_safe: true
+  required_env_vars: [STRIPE_WEBHOOK_SECRET]
+  hazards:
+    - category: RUNTIME_ENV
+      file: "*"
+      min_severity: MEDIUM
+      symbol: STRIPE_WEBHOOK_SECRET
+  allowed_extra:
+    - category: [SECURITY, API_CONTRACT]
+      file: "app/routers/webhooks.py"
+    - category: RUNTIME_ENV
+      file: "*"

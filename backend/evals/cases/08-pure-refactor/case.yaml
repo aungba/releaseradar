@@ -1,0 +1,39 @@
+description: Internal refactor (extract helper, rename private function); behaviour unchanged.
+files:
+  - path: app/services/pricing.py
+    patch: |
+      @@ -10,20 +10,24 @@ from app.models import Plan
+       
+       
+      -def _calc(plan: Plan, seats: int) -> int:
+      -    base = plan.base_cents
+      -    if seats > plan.included_seats:
+      -        base += (seats - plan.included_seats) * plan.seat_cents
+      -    return base
+      +def _extra_seats(plan: Plan, seats: int) -> int:
+      +    return max(0, seats - plan.included_seats)
+      +
+      +
+      +def _monthly_total(plan: Plan, seats: int) -> int:
+      +    return plan.base_cents + _extra_seats(plan, seats) * plan.seat_cents
+       
+       
+       def quote(plan: Plan, seats: int, annual: bool) -> Quote:
+      -    monthly = _calc(plan, seats)
+      +    monthly = _monthly_total(plan, seats)
+           total = monthly * 12 if annual else monthly
+           if annual:
+               total = int(total * (1 - plan.annual_discount))
+           return Quote(plan_id=plan.id, seats=seats, total_cents=total)
+  - path: tests/services/test_pricing.py
+    patch: |
+      @@ -30,3 +30,8 @@ def test_quote_annual_discount(plan: Plan) -> None:
+           assert quote(plan, 5, annual=True).total_cents == 10_800
+      +
+      +
+      +def test_extra_seats_never_negative(plan: Plan) -> None:
+      +    assert _extra_seats(plan, 0) == 0
+expected:
+  verdict: [APPROVED]
+  rollback_safe: true
+  hazards: []

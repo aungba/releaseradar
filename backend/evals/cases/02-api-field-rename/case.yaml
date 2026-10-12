@@ -1,0 +1,35 @@
+description: Public payment response renames amount_cents to amount.
+files:
+  - path: app/schemas/payment.py
+    patch: |
+      @@ -8,10 +8,10 @@ from pydantic import BaseModel
+       class PaymentOut(BaseModel):
+           id: str
+           status: PaymentStatus
+      -    amount_cents: int
+      +    amount: int  # still in cents
+           currency: str
+           created_at: datetime
+  - path: app/services/payments.py
+    patch: |
+      @@ -41,7 +41,7 @@ def to_out(payment: Payment) -> PaymentOut:
+           return PaymentOut(
+               id=payment.public_id,
+               status=payment.status,
+      -        amount_cents=payment.amount_cents,
+      +        amount=payment.amount_cents,
+               currency=payment.currency,
+               created_at=payment.created_at,
+           )
+expected:
+  verdict: [APPROVED_WITH_CAUTION, BLOCKED]
+  rollback_safe: true
+  hazards:
+    - category: API_CONTRACT
+      file: "app/schemas/payment.py"
+      min_severity: HIGH
+      breaking: true
+      symbol: amount_cents
+  allowed_extra:
+    - category: API_CONTRACT
+      file: "app/services/payments.py"

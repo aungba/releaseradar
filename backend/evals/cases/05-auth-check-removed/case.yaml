@@ -1,0 +1,27 @@
+description: Admin user-impersonation endpoint loses its admin check during a refactor.
+files:
+  - path: app/routers/admin.py
+    patch: |
+      @@ -1,4 +1,4 @@
+      -from app.auth.deps import CurrentUser, require_admin
+      +from app.auth.deps import CurrentUser
+       from app.services import impersonation
+       
+       router = APIRouter(prefix="/v1/admin")
+      @@ -22,10 +22,9 @@ router = APIRouter(prefix="/v1/admin")
+       @router.post("/impersonate/{user_id}")
+       async def impersonate(
+           user_id: UUID,
+      -    admin: Annotated[User, Depends(require_admin)],
+      +    actor: CurrentUser,
+           session: SessionDep,
+       ) -> TokenOut:
+      -    return await impersonation.start(session, actor=admin, target_id=user_id)
+      +    return await impersonation.start(session, actor=actor, target_id=user_id)
+expected:
+  verdict: [BLOCKED, APPROVED_WITH_CAUTION]
+  rollback_safe: true
+  hazards:
+    - category: SECURITY
+      file: "app/routers/admin.py"
+      min_severity: HIGH

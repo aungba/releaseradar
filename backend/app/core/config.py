@@ -17,7 +17,15 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:5173"]
 
     llm_primary_model: str = "gemini/gemini-2.5-pro"
-    llm_fallback_model: str = "groq/llama-3.3-70b-versatile"
+    # Groq model with JSON-schema structured outputs; final choice follows the eval baseline.
+    llm_fallback_model: str = "groq/openai/gpt-oss-120b"
+    gemini_api_key: str = ""
+    groq_api_key: str = ""
+    llm_timeout_seconds: float = 90.0
+    llm_max_output_tokens: int = 8192
+    # Input caps (tokens) even when the window is larger: latency and cost (M2 plan §3.3).
+    llm_input_cap_primary: int = 150_000
+    llm_input_cap_fallback: int = 90_000
 
 
 @lru_cache

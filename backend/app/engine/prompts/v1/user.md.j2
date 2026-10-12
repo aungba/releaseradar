@@ -1,0 +1,26 @@
+Assess the deployment risk of deploying `{{ context.target_ref }}` to an environment currently running `{{ context.base_ref }}`.
+
+Repository: `{{ context.repo }}`
+Changed files: {{ stats.files_total }} ({{ stats.additions }} additions, {{ stats.deletions }} deletions)
+{% if commits %}
+## Commits ({{ commits | length }}{% if commits_omitted %}, {{ commits_omitted }} more not shown{% endif %})
+{% for c in commits %}- {{ c.title }}
+{% endfor %}{% endif %}
+{% if signals %}
+## Automated findings (deterministic; verify against the diff)
+{% for s in signals %}- {{ s.kind }} in `{{ s.file_path }}`{% if s.symbol %}: `{{ s.symbol }}`{% endif %}{% if s.evidence %} — `{{ s.evidence }}`{% endif %}
+{% endfor %}{% endif %}
+{% if not_shown %}
+## Changed but not shown
+{% for s in not_shown %}- `{{ s.path }}` ({{ s.reason }})
+{% endfor %}{% endif %}
+{% if truncated %}
+## Truncated (only the first hunks are shown)
+{% for p in truncated %}- `{{ p }}`
+{% endfor %}{% endif %}
+{% if provider_truncated %}
+NOTE: the git provider did not return the complete change set; some changes are missing entirely.
+{% endif %}
+<diff>
+{{ files }}
+</diff>

@@ -1,0 +1,33 @@
+name: Evals
+
+# Runs the analysis-engine eval suite against real models. Manual only: it costs money
+# and needs provider keys. Commit the result files it uploads when a prompt changes.
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "primary | fallback | both | a LiteLLM model name"
+        default: both
+        required: true
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      RR_GEMINI_API_KEY: ${{ secrets.RR_GEMINI_API_KEY }}
+      RR_GROQ_API_KEY: ${{ secrets.RR_GROQ_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run rr eval --model "${{ inputs.model }}" --no-cache --check
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: backend/evals/results/

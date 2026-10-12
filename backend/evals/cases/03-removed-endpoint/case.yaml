@@ -1,0 +1,45 @@
+description: CSV export endpoint is deleted; customers' integrations call it.
+files:
+  - path: app/routers/reports.py
+    patch: |
+      @@ -30,22 +30,6 @@ async def list_reports(
+           return await reports.list_for_org(session, user.org_id, limit=limit)
+       
+       
+      -@router.get("/v1/reports/export")
+      -async def export_reports_csv(
+      -    user: CurrentUser,
+      -    session: SessionDep,
+      -    since: date | None = None,
+      -) -> StreamingResponse:
+      -    rows = await reports.export_rows(session, user.org_id, since=since)
+      -    return StreamingResponse(
+      -        to_csv(rows),
+      -        media_type="text/csv",
+      -        headers={"Content-Disposition": "attachment; filename=reports.csv"},
+      -    )
+      -
+      -
+       @router.get("/v1/reports/{report_id}")
+       async def get_report(report_id: UUID, user: CurrentUser, session: SessionDep) -> ReportOut:
+           return await reports.get(session, user.org_id, report_id)
+  - path: app/services/reports.py
+    patch: |
+      @@ -55,12 +55,3 @@ async def get(session: AsyncSession, org_id: UUID, report_id: UUID) -> Report:
+           return report
+      -
+      -
+      -async def export_rows(session: AsyncSession, org_id: UUID, since: date | None) -> list[Row]:
+      -    query = select(Report).where(Report.org_id == org_id)
+      -    if since:
+      -        query = query.where(Report.created_at >= since)
+      -    return [to_row(r) for r in (await session.scalars(query)).all()]
+expected:
+  verdict: [APPROVED_WITH_CAUTION, BLOCKED]
+  rollback_safe: true
+  hazards:
+    - category: API_CONTRACT
+      file: "app/routers/reports.py"
+      min_severity: HIGH
+      breaking: true
+      symbol: /v1/reports/export

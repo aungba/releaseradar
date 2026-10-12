@@ -1,0 +1,40 @@
+description: Cache keys and serialization change; old and new pods share Redis during a rolling deploy.
+files:
+  - path: app/cache/profiles.py
+    patch: |
+      @@ -1,21 +1,22 @@
+      -import json
+      +import msgpack
+       
+       from app.core.redis import redis
+       
+       TTL_SECONDS = 3600
+       
+       
+      -def _key(user_id: int) -> str:
+      -    return f"profile:{user_id}"
+      +def _key(user_id: int, tenant_id: int) -> str:
+      +    return f"profile:v2:{tenant_id}:{user_id}"
+       
+       
+      -async def get_profile(user_id: int) -> dict | None:
+      -    raw = await redis.get(_key(user_id))
+      -    return json.loads(raw) if raw else None
+      +async def get_profile(user_id: int, tenant_id: int) -> dict | None:
+      +    raw = await redis.get(_key(user_id, tenant_id))
+      +    return msgpack.unpackb(raw) if raw else None
+       
+       
+      -async def set_profile(user_id: int, profile: dict) -> None:
+      -    await redis.set(_key(user_id), json.dumps(profile), ex=TTL_SECONDS)
+      +async def set_profile(user_id: int, tenant_id: int, profile: dict) -> None:
+      +    await redis.set(_key(user_id, tenant_id), msgpack.packb(profile), ex=TTL_SECONDS)
+expected:
+  verdict: [APPROVED_WITH_CAUTION, BLOCKED]
+  hazards:
+    - category: SHARED_STATE
+      file: "app/cache/profiles.py"
+      min_severity: MEDIUM
+  allowed_extra:
+    - category: [RUNTIME_ENV, API_CONTRACT]
+      file: "app/cache/profiles.py"

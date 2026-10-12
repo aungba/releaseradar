@@ -1,0 +1,53 @@
+description: Migration drops users.legacy_email while the notifier still reads it.
+files:
+  - path: alembic/versions/0042_drop_legacy_email.py
+    status: ADDED
+    patch: |
+      @@ -0,0 +1,18 @@
+      +"""drop legacy email
+      +
+      +Revision ID: 0042
+      +Revises: 0041
+      +"""
+      +import sqlalchemy as sa
+      +from alembic import op
+      +
+      +revision = "0042"
+      +down_revision = "0041"
+      +
+      +
+      +def upgrade() -> None:
+      +    op.drop_column("users", "legacy_email")
+      +
+      +
+      +def downgrade() -> None:
+      +    op.add_column("users", sa.Column("legacy_email", sa.String(255)))
+  - path: app/models/user.py
+    patch: |
+      @@ -12,7 +12,6 @@ class User(Base):
+           id: Mapped[int] = mapped_column(primary_key=True)
+           email: Mapped[str] = mapped_column(String(255), unique=True)
+      -    legacy_email: Mapped[str | None] = mapped_column(String(255))
+           created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+  - path: app/services/notifier.py
+    patch: |
+      @@ -20,9 +20,10 @@ async def send_receipt(session: AsyncSession, user_id: int, receipt: Receipt) -> None:
+           user = await session.get(User, user_id)
+      -    log.info("sending receipt", user=user_id)
+      +    log.info("sending receipt", user=user_id, channel="email")
+           # Older accounts were migrated without a primary email.
+           recipient = user.email or user.legacy_email
+           await mailer.send(recipient, render_receipt(receipt))
+expected:
+  verdict: [BLOCKED, APPROVED_WITH_CAUTION]
+  rollback_safe: false
+  hazards:
+    - category: DATABASE
+      file: "alembic/versions/*_drop_legacy_email.py"
+      min_severity: HIGH
+      symbol: legacy_email
+  allowed_extra:
+    - category: [DATABASE, API_CONTRACT]
+      file: "app/services/notifier.py"
+    - category: DATABASE
+      file: "app/models/user.py"

@@ -1,0 +1,25 @@
+description: OrderPlaced event payload renames order_id to orderId; consumers live in other services.
+files:
+  - path: app/events/publisher.py
+    patch: |
+      @@ -18,12 +18,13 @@ async def publish_order_placed(order: Order) -> None:
+           message = {
+      -        "type": "order.placed",
+      -        "order_id": str(order.id),
+      -        "customer_id": str(order.customer_id),
+      -        "total_cents": order.total_cents,
+      +        "type": "order.placed",
+      +        "version": 2,
+      +        "orderId": str(order.id),
+      +        "customerId": str(order.customer_id),
+      +        "totalCents": order.total_cents,
+           }
+           await broker.publish("orders", json.dumps(message).encode())
+expected:
+  verdict: [APPROVED_WITH_CAUTION, BLOCKED]
+  rollback_safe: false
+  hazards:
+    - category: [SHARED_STATE, API_CONTRACT]
+      file: "app/events/publisher.py"
+      min_severity: HIGH
+      symbol: order_id

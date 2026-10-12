@@ -7,6 +7,10 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 
+# Evals: pilot cases contain customer code; cache holds raw LLM responses
+backend/evals/private/
+backend/evals/.cache/
+
 # Node
 node_modules/
 dist/
