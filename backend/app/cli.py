@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import uuid
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 import typer
@@ -79,6 +80,82 @@ def seed(
     """
     token = asyncio.run(_seed(email, repo, provider, base_url))
     typer.echo("Seeded demo data. ReleaseRadar access token (shown once):")
+    typer.echo(token)
+
+
+async def _create_user_and_token(
+    org_name: str, email: str, display_name: str, role: UserRole, days: int
+) -> str:
+    async with get_sessionmaker()() as session, session.begin():
+        existing = await session.scalar(select(User).where(User.email == email))
+        if existing is not None:
+            raise typer.BadParameter(f"user with email {email!r} already exists")
+        org = await session.scalar(select(Organization).where(Organization.name == org_name))
+        if org is None:
+            org = Organization(name=org_name)
+            session.add(org)
+            await session.flush()
+        user = User(org_id=org.id, email=email, display_name=display_name, role=role)
+        session.add(user)
+        await session.flush()
+
+        issued = generate_api_token()
+        expires_at = datetime.now(UTC) + timedelta(days=days) if days > 0 else None
+        session.add(
+            ApiToken(
+                user_id=user.id,
+                name="cli-onboarding",
+                token_prefix=issued.display_prefix,
+                token_hash=issued.token_hash,
+                expires_at=expires_at,
+            )
+        )
+    return issued.plaintext
+
+
+@app.command("create-user")
+def create_user(
+    org: Annotated[str, typer.Option(help="Organization name (created if missing)")],
+    email: Annotated[str, typer.Option(help="User email address")],
+    name: Annotated[str | None, typer.Option(help="Display name")] = None,
+    role: Annotated[UserRole, typer.Option(help="ADMIN or MEMBER")] = UserRole.ADMIN,
+    days: Annotated[int, typer.Option(help="Initial token expiry in days (0 = never)")] = 90,
+) -> None:
+    """Onboard a user into an organization and print a one-time access token."""
+    display = (name or "").strip() or email.split("@")[0]
+    token = asyncio.run(_create_user_and_token(org.strip(), email.strip(), display, role, days))
+    typer.echo(f"Created user {email} ({role}) in {org}. Access token (shown once):")
+    typer.echo(token)
+
+
+async def _create_token_for_email(email: str, token_name: str, days: int) -> str:
+    async with get_sessionmaker()() as session, session.begin():
+        user = await session.scalar(select(User).where(User.email == email))
+        if user is None:
+            raise typer.BadParameter(f"user {email!r} not found")
+        issued = generate_api_token()
+        expires_at = datetime.now(UTC) + timedelta(days=days) if days > 0 else None
+        session.add(
+            ApiToken(
+                user_id=user.id,
+                name=token_name,
+                token_prefix=issued.display_prefix,
+                token_hash=issued.token_hash,
+                expires_at=expires_at,
+            )
+        )
+    return issued.plaintext
+
+
+@app.command("create-token")
+def create_token(
+    email: Annotated[str, typer.Option(help="Existing user email")],
+    name: Annotated[str, typer.Option(help="Token label, e.g. laptop or release-ci")] = "cli",
+    days: Annotated[int, typer.Option(help="Token expiry in days (0 = never)")] = 90,
+) -> None:
+    """Issue a new access token for an existing user and print it once."""
+    token = asyncio.run(_create_token_for_email(email.strip(), name.strip(), days))
+    typer.echo(f"Issued token {name!r} for {email} (shown once):")
     typer.echo(token)
 
 

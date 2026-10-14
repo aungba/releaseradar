@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     # Fernet key used to encrypt provider access tokens and webhook secrets at rest.
     encryption_key: str = ""
     cors_origins: list[str] = ["http://localhost:5173"]
+    session_cookie_name: str = "rr_session"
+    session_cookie_secure: bool = False
+    token_default_ttl_days: int = 90
 
     llm_primary_model: str = "gemini/gemini-2.5-pro"
     # Groq model with JSON-schema structured outputs; final choice follows the eval baseline.

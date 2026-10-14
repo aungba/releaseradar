@@ -44,10 +44,594 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Session
+         * @description Exchange a ReleaseRadar access token for an HttpOnly session cookie.
+         */
+        post: operations["create_session_api_v1_auth_session_post"];
+        /**
+         * Delete Session
+         * @description Clear the HttpOnly session cookie.
+         */
+        delete: operations["delete_session_api_v1_auth_session_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Me
+         * @description Return the authenticated user, organization, and active token metadata.
+         */
+        get: operations["get_me_api_v1_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/tokens": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List My Tokens
+         * @description List access tokens belonging to the current user (newest first).
+         */
+        get: operations["list_my_tokens_api_v1_me_tokens_get"];
+        put?: never;
+        /**
+         * Create My Token
+         * @description Issue a new access token for the current user. Plaintext is returned once.
+         */
+        post: operations["create_my_token_api_v1_me_tokens_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/tokens/{token_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Revoke My Token
+         * @description Revoke one of the current user's access tokens.
+         */
+        delete: operations["revoke_my_token_api_v1_me_tokens__token_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/git-connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Git Connections
+         * @description List git connections in the current organization with computed token health.
+         */
+        get: operations["list_git_connections_api_v1_git_connections_get"];
+        put?: never;
+        /**
+         * Create Git Connection
+         * @description Create and live-verify a git connection (admin only).
+         */
+        post: operations["create_git_connection_api_v1_git_connections_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/git-connections/{connection_id}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify Git Connection Endpoint
+         * @description Re-verify the stored access token with the Git provider and refresh token health.
+         */
+        post: operations["verify_git_connection_endpoint_api_v1_git_connections__connection_id__verify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/git-connections/{connection_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Git Connection
+         * @description Rotate a git connection's access token or update its expiry date (admin only).
+         */
+        patch: operations["update_git_connection_api_v1_git_connections__connection_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Projects
+         * @description List active projects in the current organization ordered by name.
+         */
+        get: operations["list_projects_api_v1_projects_get"];
+        put?: never;
+        /**
+         * Create Project
+         * @description Register a repository under an organization git connection (admin only).
+         */
+        post: operations["create_project_api_v1_projects_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Project
+         * @description Return a single project in the current organization.
+         */
+        get: operations["get_project_api_v1_projects__project_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/refs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Project Refs
+         * @description Autocomplete branches and tags for a project from its Git provider.
+         */
+        get: operations["list_project_refs_api_v1_projects__project_id__refs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Reviews
+         * @description List review jobs in the current organization (newest first).
+         */
+        get: operations["list_reviews_api_v1_reviews_get"];
+        put?: never;
+        /**
+         * Start Review
+         * @description Create a QUEUED review job and enqueue it for asynchronous analysis.
+         */
+        post: operations["start_review_api_v1_reviews_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reviews/{review_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Review
+         * @description Return a review job with its hazards, prerequisites, and sign-off status.
+         */
+        get: operations["get_review_api_v1_reviews__review_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/hazards/{hazard_id}/acknowledgement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Acknowledge Hazard Endpoint
+         * @description Acknowledge a flagged hazard and record an audit event.
+         */
+        put: operations["acknowledge_hazard_endpoint_api_v1_hazards__hazard_id__acknowledgement_put"];
+        post?: never;
+        /**
+         * Unacknowledge Hazard Endpoint
+         * @description Un-acknowledge a hazard. Automatically revokes release sign-off if CRITICAL or HIGH.
+         */
+        delete: operations["unacknowledge_hazard_endpoint_api_v1_hazards__hazard_id__acknowledgement_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/prerequisites/{prerequisite_id}/completion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Complete Prerequisite Endpoint
+         * @description Mark a deployment prerequisite as completed and record an audit event.
+         */
+        put: operations["complete_prerequisite_endpoint_api_v1_prerequisites__prerequisite_id__completion_put"];
+        post?: never;
+        /**
+         * Reopen Prerequisite Endpoint
+         * @description Reopen a completed deployment prerequisite. Automatically revokes release sign-off.
+         */
+        delete: operations["reopen_prerequisite_endpoint_api_v1_prerequisites__prerequisite_id__completion_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reviews/{review_id}/signoff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sign Off Review Endpoint
+         * @description Sign off on a completed review once all CRITICAL/HIGH hazards and prerequisites are clear.
+         */
+        post: operations["sign_off_review_endpoint_api_v1_reviews__review_id__signoff_post"];
+        /**
+         * Revoke Sign Off Endpoint
+         * @description Revoke an existing release sign-off and append a SIGNOFF_REVOKED audit event.
+         */
+        delete: operations["revoke_sign_off_endpoint_api_v1_reviews__review_id__signoff_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reviews/{review_id}/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Review Audit Events
+         * @description List chronological audit trail events for a review job.
+         */
+        get: operations["list_review_audit_events_api_v1_reviews__review_id__audit_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** ApiTokenResponse */
+        ApiTokenResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Token Prefix */
+            token_prefix: string;
+            /** Expires At */
+            expires_at: string | null;
+            /** Last Used At */
+            last_used_at: string | null;
+            /** Revoked At */
+            revoked_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** AuditEventResponse */
+        AuditEventResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Review Job Id
+             * Format: uuid
+             */
+            review_job_id: string;
+            /** Actor Id */
+            actor_id: string | null;
+            /** Actor Display */
+            actor_display: string;
+            event_type: components["schemas"]["AuditEventType"];
+            /** Hazard Id */
+            hazard_id: string | null;
+            /** Prerequisite Id */
+            prerequisite_id: string | null;
+            /** Note */
+            note: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * AuditEventType
+         * @enum {string}
+         */
+        AuditEventType: "HAZARD_ACKNOWLEDGED" | "HAZARD_UNACKNOWLEDGED" | "PREREQUISITE_COMPLETED" | "PREREQUISITE_REOPENED" | "RELEASE_SIGNED_OFF" | "SIGNOFF_REVOKED";
+        /**
+         * ChangeType
+         * @enum {string}
+         */
+        ChangeType: "ADDED" | "MODIFIED" | "REMOVED" | "RENAMED";
+        /** CreateApiTokenRequest */
+        CreateApiTokenRequest: {
+            /** Name */
+            name: string;
+            /**
+             * Expires In Days
+             * @default 90
+             */
+            expires_in_days: number | null;
+        };
+        /** CreateGitConnectionRequest */
+        CreateGitConnectionRequest: {
+            provider: components["schemas"]["GitProviderKind"];
+            /**
+             * Base Url
+             * @description Defaults to official cloud API URL if omitted.
+             */
+            base_url?: string | null;
+            /** Account Login */
+            account_login: string;
+            /** Access Token */
+            access_token: string;
+            /** Token Expires At */
+            token_expires_at?: string | null;
+        };
+        /** CreateProjectRequest */
+        CreateProjectRequest: {
+            /**
+             * Git Connection Id
+             * Format: uuid
+             */
+            git_connection_id: string;
+            /** Repo Identifier */
+            repo_identifier: string;
+            /** Name */
+            name?: string | null;
+        };
+        /** CreateReviewRequest */
+        CreateReviewRequest: {
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Base Ref */
+            base_ref: string;
+            /** Target Ref */
+            target_ref: string;
+        };
+        /** CreatedApiTokenResponse */
+        CreatedApiTokenResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Token Prefix */
+            token_prefix: string;
+            /** Expires At */
+            expires_at: string | null;
+            /** Last Used At */
+            last_used_at: string | null;
+            /** Revoked At */
+            revoked_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Plaintext
+             * @description Shown once on creation; never stored in plaintext.
+             */
+            plaintext: string;
+        };
+        /** CurrentUserResponse */
+        CurrentUserResponse: {
+            user: components["schemas"]["UserResponse"];
+            organization: components["schemas"]["OrganizationResponse"];
+            /**
+             * Current Token Id
+             * Format: uuid
+             */
+            current_token_id: string;
+            /** Current Token Expires At */
+            current_token_expires_at: string | null;
+        };
+        /**
+         * GitAuthType
+         * @enum {string}
+         */
+        GitAuthType: "ACCESS_TOKEN" | "APP_INSTALLATION";
+        /** GitConnectionResponse */
+        GitConnectionResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Org Id
+             * Format: uuid
+             */
+            org_id: string;
+            provider: components["schemas"]["GitProviderKind"];
+            /** Base Url */
+            base_url: string;
+            auth_type: components["schemas"]["GitAuthType"];
+            /** Account Login */
+            account_login: string;
+            /** Token Expires At */
+            token_expires_at: string | null;
+            /** Last Verified At */
+            last_verified_at: string | null;
+            token_health: components["schemas"]["TokenHealth"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * GitProviderKind
+         * @enum {string}
+         */
+        GitProviderKind: "github" | "gitlab" | "bitbucket";
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /**
+         * HazardCategory
+         * @enum {string}
+         */
+        HazardCategory: "API_CONTRACT" | "DATABASE" | "RUNTIME_ENV" | "SECURITY" | "SHARED_STATE";
+        /** HazardResponse */
+        HazardResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Review Job Id
+             * Format: uuid
+             */
+            review_job_id: string;
+            category: components["schemas"]["HazardCategory"];
+            severity: components["schemas"]["Severity"];
+            /** File Path */
+            file_path: string;
+            /** Hazard Title */
+            hazard_title: string;
+            /** Explanation */
+            explanation: string;
+            /** Remediation */
+            remediation: string;
+            /** Is Breaking */
+            is_breaking: boolean;
+            change_type: components["schemas"]["ChangeType"] | null;
+            /** Affected Symbol */
+            affected_symbol: string | null;
+            /** Acknowledged By */
+            acknowledged_by: string | null;
+            /** Acknowledged At */
+            acknowledged_at: string | null;
+        };
         /** HealthResponse */
         HealthResponse: {
             /**
@@ -55,6 +639,90 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /**
+         * JobStatus
+         * @enum {string}
+         */
+        JobStatus: "QUEUED" | "RUNNING" | "COMPLETED" | "FAILED" | "CANCELLED";
+        /** NoteRequest */
+        NoteRequest: {
+            /** Note */
+            note?: string | null;
+        };
+        /** OrganizationResponse */
+        OrganizationResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Timezone */
+            timezone: string;
+        };
+        /**
+         * PrerequisiteKind
+         * @enum {string}
+         */
+        PrerequisiteKind: "REQUIRED_ENV_VAR" | "PRE_DEPLOY_ACTION";
+        /** PrerequisiteResponse */
+        PrerequisiteResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Review Job Id
+             * Format: uuid
+             */
+            review_job_id: string;
+            kind: components["schemas"]["PrerequisiteKind"];
+            /** Description */
+            description: string;
+            /** Sort Order */
+            sort_order: number;
+            /** Completed By */
+            completed_by: string | null;
+            /** Completed At */
+            completed_at: string | null;
+        };
+        /** ProjectResponse */
+        ProjectResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Org Id
+             * Format: uuid
+             */
+            org_id: string;
+            /**
+             * Git Connection Id
+             * Format: uuid
+             */
+            git_connection_id: string;
+            /** Name */
+            name: string;
+            /** Repo Identifier */
+            repo_identifier: string;
+            /** External Repo Id */
+            external_repo_id: string | null;
+            /** Default Branch */
+            default_branch: string;
+            /** Is Active */
+            is_active: boolean;
+            provider?: components["schemas"]["GitProviderKind"] | null;
+            token_health?: components["schemas"]["TokenHealth"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** ReadinessResponse */
         ReadinessResponse: {
@@ -66,6 +734,219 @@ export interface components {
             /** Database */
             database: boolean;
         };
+        /**
+         * RefKind
+         * @enum {string}
+         */
+        RefKind: "branch" | "tag";
+        /** RefResponse */
+        RefResponse: {
+            /** Name */
+            name: string;
+            kind: components["schemas"]["RefKind"];
+            /** Sha */
+            sha?: string | null;
+        };
+        /** ReviewDetailResponse */
+        ReviewDetailResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Triggered By */
+            triggered_by: string | null;
+            review_type: components["schemas"]["ReviewType"];
+            status: components["schemas"]["JobStatus"];
+            /** Base Ref */
+            base_ref: string;
+            /** Target Ref */
+            target_ref: string;
+            /** Base Sha */
+            base_sha: string | null;
+            /** Target Sha */
+            target_sha: string | null;
+            /** Pr Number */
+            pr_number: number | null;
+            verdict: components["schemas"]["Verdict"] | null;
+            risk_rating?: components["schemas"]["RiskRating"] | null;
+            /** Risk Score */
+            risk_score: number | null;
+            /** Executive Summary */
+            executive_summary: string | null;
+            /** Rollback Safe */
+            rollback_safe: boolean | null;
+            /** Rollback Notes */
+            rollback_notes: string | null;
+            /** Llm Model */
+            llm_model: string | null;
+            /** Error Message */
+            error_message: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Started At */
+            started_at: string | null;
+            /** Completed At */
+            completed_at: string | null;
+            /** Raw Metrics */
+            raw_metrics: {
+                [key: string]: unknown;
+            };
+            /** Hazards */
+            hazards: components["schemas"]["HazardResponse"][];
+            /** Prerequisites */
+            prerequisites: components["schemas"]["PrerequisiteResponse"][];
+            signoff_status: components["schemas"]["SignoffSummary"];
+        };
+        /** ReviewJobSummary */
+        ReviewJobSummary: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Triggered By */
+            triggered_by: string | null;
+            review_type: components["schemas"]["ReviewType"];
+            status: components["schemas"]["JobStatus"];
+            /** Base Ref */
+            base_ref: string;
+            /** Target Ref */
+            target_ref: string;
+            /** Base Sha */
+            base_sha: string | null;
+            /** Target Sha */
+            target_sha: string | null;
+            /** Pr Number */
+            pr_number: number | null;
+            verdict: components["schemas"]["Verdict"] | null;
+            risk_rating?: components["schemas"]["RiskRating"] | null;
+            /** Risk Score */
+            risk_score: number | null;
+            /** Executive Summary */
+            executive_summary: string | null;
+            /** Rollback Safe */
+            rollback_safe: boolean | null;
+            /** Rollback Notes */
+            rollback_notes: string | null;
+            /** Llm Model */
+            llm_model: string | null;
+            /** Error Message */
+            error_message: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Started At */
+            started_at: string | null;
+            /** Completed At */
+            completed_at: string | null;
+        };
+        /**
+         * ReviewType
+         * @enum {string}
+         */
+        ReviewType: "DAILY_DIGEST" | "PULL_REQUEST" | "ON_DEMAND_COMPARE";
+        /**
+         * RiskRating
+         * @enum {string}
+         */
+        RiskRating: "GREEN" | "AMBER" | "RED";
+        /** SessionLoginRequest */
+        SessionLoginRequest: {
+            /**
+             * Token
+             * @description ReleaseRadar access token (rr_...)
+             */
+            token: string;
+        };
+        /**
+         * Severity
+         * @enum {string}
+         */
+        Severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+        /** SignoffSummary */
+        SignoffSummary: {
+            /** Is Signed Off */
+            is_signed_off: boolean;
+            /** Signed Off By */
+            signed_off_by?: string | null;
+            /** Signed Off At */
+            signed_off_at?: string | null;
+            /** Signoff Note */
+            signoff_note?: string | null;
+            /** Can Sign Off */
+            can_sign_off: boolean;
+            /** Blocking Reasons */
+            blocking_reasons?: string[];
+        };
+        /**
+         * TokenHealth
+         * @enum {string}
+         */
+        TokenHealth: "OK" | "EXPIRING_SOON" | "EXPIRED" | "UNKNOWN";
+        /** UpdateGitConnectionRequest */
+        UpdateGitConnectionRequest: {
+            /** Access Token */
+            access_token?: string | null;
+            /** Token Expires At */
+            token_expires_at?: string | null;
+        };
+        /** UserResponse */
+        UserResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Org Id
+             * Format: uuid
+             */
+            org_id: string;
+            /** Email */
+            email: string;
+            /** Display Name */
+            display_name: string;
+            role: components["schemas"]["UserRole"];
+        };
+        /**
+         * UserRole
+         * @enum {string}
+         */
+        UserRole: "ADMIN" | "MEMBER";
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
+        };
+        /**
+         * Verdict
+         * @enum {string}
+         */
+        Verdict: "APPROVED" | "APPROVED_WITH_CAUTION" | "BLOCKED";
     };
     responses: never;
     parameters: never;
@@ -111,6 +992,742 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReadinessResponse"];
+                };
+            };
+        };
+    };
+    create_session_api_v1_auth_session_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionLoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CurrentUserResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_session_api_v1_auth_session_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_me_api_v1_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CurrentUserResponse"];
+                };
+            };
+        };
+    };
+    list_my_tokens_api_v1_me_tokens_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiTokenResponse"][];
+                };
+            };
+        };
+    };
+    create_my_token_api_v1_me_tokens_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateApiTokenRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreatedApiTokenResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revoke_my_token_api_v1_me_tokens__token_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_git_connections_api_v1_git_connections_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GitConnectionResponse"][];
+                };
+            };
+        };
+    };
+    create_git_connection_api_v1_git_connections_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateGitConnectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GitConnectionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    verify_git_connection_endpoint_api_v1_git_connections__connection_id__verify_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GitConnectionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_git_connection_api_v1_git_connections__connection_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                connection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGitConnectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GitConnectionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_projects_api_v1_projects_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"][];
+                };
+            };
+        };
+    };
+    create_project_api_v1_projects_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_project_api_v1_projects__project_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_project_refs_api_v1_projects__project_id__refs_get: {
+        parameters: {
+            query?: {
+                /** @description Branch or tag prefix filter */
+                q?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RefResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_reviews_api_v1_reviews_get: {
+        parameters: {
+            query?: {
+                project_id?: string | null;
+                status?: components["schemas"]["JobStatus"] | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewJobSummary"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    start_review_api_v1_reviews_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewJobSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_review_api_v1_reviews__review_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                review_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReviewDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    acknowledge_hazard_endpoint_api_v1_hazards__hazard_id__acknowledgement_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                hazard_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NoteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HazardResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unacknowledge_hazard_endpoint_api_v1_hazards__hazard_id__acknowledgement_delete: {
+        parameters: {
+            query?: {
+                note?: string | null;
+            };
+            header?: never;
+            path: {
+                hazard_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NoteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HazardResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    complete_prerequisite_endpoint_api_v1_prerequisites__prerequisite_id__completion_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prerequisite_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NoteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PrerequisiteResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reopen_prerequisite_endpoint_api_v1_prerequisites__prerequisite_id__completion_delete: {
+        parameters: {
+            query?: {
+                note?: string | null;
+            };
+            header?: never;
+            path: {
+                prerequisite_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NoteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PrerequisiteResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sign_off_review_endpoint_api_v1_reviews__review_id__signoff_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                review_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NoteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignoffSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revoke_sign_off_endpoint_api_v1_reviews__review_id__signoff_delete: {
+        parameters: {
+            query?: {
+                note?: string | null;
+            };
+            header?: never;
+            path: {
+                review_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["NoteRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignoffSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_review_audit_events_api_v1_reviews__review_id__audit_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                review_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditEventResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
